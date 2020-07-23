@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 typedef struct sElemento
 {
-    int dado;
+    char dado[25];
     struct sElemento *next;
     struct sElemento *prev;
 } Elemento;
@@ -17,9 +18,9 @@ typedef struct sLista
 } Lista;
 
 Lista* criaLista();
-Elemento* criaElemento(int);
+Elemento* criaElemento(char*);
 bool listaEstaVazia(Lista*);
-void insereLista(Lista*, int, Elemento*);
+void insereLista(Lista*, char*, Elemento*);
 void escreveLista(Lista*);
 void removeLista(Lista*, Elemento*);
 void buscaLista(Lista*);
@@ -36,10 +37,11 @@ Lista* criaLista()
     return lista;
 }
 
-Elemento* criaElemento(int dado)
+Elemento* criaElemento(char* dado)
 {
     Elemento* elemento = (Elemento*) malloc(sizeof(Elemento));
-    elemento->dado = dado;
+    strcpy(elemento->dado, dado);
+    elemento->next = NULL;
     elemento->next = elemento->prev =NULL;
     
     return elemento;
@@ -61,16 +63,16 @@ void escreveLista(Lista* lista){
     printf("->");
     while (pointer!=NULL)
     {
-        printf("%i -> ", pointer->dado);
+        printf("%s -> ", pointer->dado);
         pointer = pointer->next;
     }
     printf("NUUL \n");
     
 }
 
-void insereLista(Lista* lista, int dado, Elemento* elementoPivo){
+void insereLista(Lista* lista, char* dado, Elemento* elementoPivo){
     Elemento* novo_elemento = criaElemento(dado);    
-    novo_elemento->dado = dado;
+    strcpy(novo_elemento->dado, dado);   
 
     if((elementoPivo == NULL) && !listaEstaVazia(lista)){
         printf("So eh aceito pivo nulo na insercao do primeiro elemento");
@@ -121,28 +123,28 @@ void removeLista(Lista* lista, Elemento* elemento){
 }
 
 void buscaLista(Lista* lista){
-    int elemento;
+    char elemento[25];
     printf("Digite o elemento a ser procurado: \n");
-    scanf("%d", &elemento);
+    scanf("%c", elemento);
     
     //percore cabeca-cauda
-   /* Elemento* pointer = lista->head;
+   Elemento* pointer = lista->head;
 
-    while(pointer!=NULL && pointer->dado!=elemento){
+    while(pointer!=NULL && pointer->dado != elemento){
          pointer = pointer->next;
-    }*/
-
+    }
+    
     //percore cauda-cabeca
+    /*
     Elemento* pointer = lista->tail;
-
-    while(pointer!=NULL && pointer->dado!=elemento){
+    while(pointer!=NULL && pointer->dado != elemento){
          pointer = pointer->prev;
     }
-
+    */
     if(pointer==NULL){
         printf("Elemento nao esta na lista\n");
     }else{
-        printf("Elemento encontrado: %d\n", pointer->dado);
+        printf("Elemento encontrado: %s\n", pointer->dado);
     }
 }
 
@@ -150,20 +152,20 @@ int main()
 {
     Lista* lista = criaLista();
     printf("Inserindo dados\n");
-    insereLista(lista, 5, NULL);
-    insereLista(lista, 8, lista->tail);
-    insereLista(lista, 9, lista->head);
+    insereLista(lista, "teste", NULL);
+    insereLista(lista, "teste2", lista->tail);
+    insereLista(lista, "teste3", lista->head);
     escreveLista(lista);
     
     printf("Removendo dados\n");
    
     removeLista(lista, lista->tail);
-    removeLista(lista, lista->head);
+    removeLista(lista, lista->tail);
 
 
     escreveLista(lista);
 
-    buscaLista(lista);
+    //buscaLista(lista);
 
     return 0;
 }

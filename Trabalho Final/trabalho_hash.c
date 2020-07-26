@@ -3,31 +3,93 @@
 #include <stdbool.h>
 #include <string.h>
 
-typedef struct sElemento
-{
+typedef struct sElemento{
     char dado[25];
-    struct sElemento *next;
-    struct sElemento *prev;
+    struct sElemento *nextElemento;
+    struct sElemento *prevElemento;
 } Elemento;
 
-typedef struct sLista
-{
+typedef struct sListaElementos{
     int tamanho;
-    struct sElemento *head;
-    struct sElemento *tail;
-} Lista;
+    struct sElemento *headListaElementos;
+    struct sElemento *tailListaElementos;
+} ListaElementos;
 
-Lista* criaLista();
+typedef struct sChave{
+    int id;
+    struct sChave *nextChave;
+    struct sChave *prevChave;
+
+    struct sListaElementos *headListaElementos;
+
+} Chave;
+
+typedef struct sListaChaves{
+    int tamanho;
+    struct sChave *headListaChave;
+    struct sChave *tailListaChave;
+
+} ListaChaves;
+
+// Funções para a lista de chaves
+ListaChaves* criaListaChaves();
+Chave* criaChave();
+void insereListaChave(ListaChaves*);
+void escreveListaChave(ListaChaves*);
+
+
+// Funções para a lista de elementos
+ListaElementos* criaListaElementos();
 Elemento* criaElemento(char*);
-bool listaEstaVazia(Lista*);
-void insereLista(Lista*, char*, Elemento*);
-void escreveLista(Lista*);
-void removeLista(Lista*, Elemento*);
-void buscaLista(Lista*);
+bool listaElementosEstaVazia(ListaElementos*);
+void insereListaElementos(ListaElementos*, char*, Elemento*);
+void escreveListaElementos(ListaElementos*);
+void removeListaElementos(ListaElementos*, Elemento*);
+void buscaListaElementos(ListaElementos*);
 
-//funcao para criar a lista
-Lista* criaLista()
-{
+
+// Função que inicia o programa
+int main(){
+    return 0;
+}
+
+// Funções para a lista de chaves
+
+ListaChaves* criaListaChaves(){
+    ListaChaves* listaChaves = (ListaChaves*)malloc(sizeof(ListaChaves));
+
+    listaChaves->tamanho = 0;
+    listaChaves->headListaChave = NULL;
+    listaChaves->tailListaChave = NULL;
+
+    return listaChaves;
+}
+
+Chave* criaChave(){
+    Chave* chave = (Chave*) malloc(sizeof(Chave));
+    chave->id = 0;
+    chave->nextChave = NULL;
+    chave->nextChave = chave->prevChave = NULL;
+
+    chave->headListaElementos = NULL;
+
+    return chave;
+}
+
+void insereListaChave(ListaChaves* listaChaves){
+    Chave* novaChave = criaChave(); 
+    if(listaChaves->tamanho==0){
+        listaChaves->headListaChave = novaChave;
+        listaChaves->tailListaChave = novaChave;
+    }
+    
+    
+}
+
+
+
+// Funções para a lista de elementos
+Lista* criaLista(){
     Lista* lista = (Lista*)malloc(sizeof(Lista));
 
     lista->tamanho = 0;
@@ -37,8 +99,7 @@ Lista* criaLista()
     return lista;
 }
 
-Elemento* criaElemento(char* dado)
-{
+Elemento* criaElemento(char* dado){
     Elemento* elemento = (Elemento*) malloc(sizeof(Elemento));
     strcpy(elemento->dado, dado);
     elemento->next = NULL;
@@ -148,24 +209,3 @@ void buscaLista(Lista* lista){
     }
 }
 
-int main()
-{
-    Lista* lista = criaLista();
-    printf("Inserindo dados\n");
-    insereLista(lista, "teste", NULL);
-    insereLista(lista, "teste2", lista->tail);
-    insereLista(lista, "teste3", lista->head);
-    escreveLista(lista);
-    
-    printf("Removendo dados\n");
-   
-    removeLista(lista, lista->tail);
-    removeLista(lista, lista->tail);
-
-
-    escreveLista(lista);
-
-    //buscaLista(lista);
-
-    return 0;
-}

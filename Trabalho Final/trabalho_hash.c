@@ -40,12 +40,11 @@ void escreveListaChave(ListaChaves*);
 // Funções para a lista de elementos
 ListaElementos* criaListaElementos();
 Elemento* criaElemento(char*);
-bool listaElementosEstaVazia(ListaElementos*);
 void insereListaElementos(ListaElementos*, char*, Elemento*);
 void escreveListaElementos(ListaElementos*);
 void removeListaElementos(ListaElementos*, Elemento*);
 void buscaListaElementos(ListaElementos*);
-
+int hash(char*);
 
 // Função que inicia o programa
 int main(){
@@ -54,12 +53,13 @@ int main(){
 
     printf("Inserindo dados\n");
 
-    for(i=0; i<=10; i++){
+    for(i=0; i<=9; i++){
         insereListaChave(listaChaves, i, listaChaves->tailListaChave);
     }
     
     printf("Imprimindo lista de chaves\n");
     escreveListaChave(listaChaves);
+
     return 0;
 }
 
@@ -124,6 +124,66 @@ void escreveListaChave(ListaChaves* listaChave){
     
 }
 
-
 // Funções para a lista de elementos
+ListaElementos* criaListaElementos(){
+    ListaElementos* listaElementos = (ListaElementos*)malloc(sizeof(ListaElementos));
 
+    listaElementos->tamanho = 0;
+    listaElementos->headListaElementos = NULL;
+    listaElementos->tailListaElementos = NULL;
+
+    return listaElementos;
+}
+
+Elemento* criaElemento(char* nome){
+    Elemento* elemento = (Elemento*) malloc(sizeof(Elemento));
+    strcpy(elemento->dado, nome);
+    
+    elemento->nextElemento = NULL;
+    elemento->nextElemento = elemento->prevElemento =NULL;
+
+    return elemento;
+}
+
+int hash(char* nome){
+    int i = 0;
+    int key;
+    char primeiraLetra;
+    for(i = 0; i < 25; i++){
+       primeiraLetra = nome[0];
+    }
+
+    if(primeiraLetra == 'M'){
+       key = 77; 
+    }
+
+    return key % 10;
+}
+
+
+void insereListaElementos(ListaElementos* listaElementos, char* nome, Elemento* elementoPivo){
+    int h;
+    Elemento* novoElemento = criaElemento(nome);    
+    strcpy(novoElemento->dado, nome);
+    
+    h = hash(nome);
+
+
+    if(listaElementos->tamanho == 0){
+        listaElementos->headListaElementos = novoElemento;
+        listaElementos->tailListaElementos = novoElemento;
+    }else{
+        novoElemento->nextElemento = elementoPivo->nextElemento;
+        novoElemento->prevElemento = elementoPivo;
+
+        if(elementoPivo->nextElemento == NULL){
+            listaElementos->tailListaElementos = novoElemento;
+        }else{
+            elementoPivo->nextElemento->prevElemento = novoElemento;
+        }
+
+        elementoPivo->nextElemento = novoElemento;
+    }
+
+    listaElementos->tamanho++;    
+}

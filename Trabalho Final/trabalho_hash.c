@@ -33,10 +33,9 @@ typedef struct sListaChaves{
 
 // Funções para a lista de chaves
 ListaChaves* criaListaChaves();
-Chave* criaChave();
-void insereListaChave(ListaChaves*);
+Chave* criaChave(int);
+void insereListaChave(ListaChaves*, int, Chave*);
 void escreveListaChave(ListaChaves*);
-
 
 // Funções para a lista de elementos
 ListaElementos* criaListaElementos();
@@ -50,6 +49,17 @@ void buscaListaElementos(ListaElementos*);
 
 // Função que inicia o programa
 int main(){
+    int i;
+    ListaChaves* listaChaves = criaListaChaves();
+
+    printf("Inserindo dados\n");
+
+    for(i=0; i<=10; i++){
+        insereListaChave(listaChaves, i, listaChaves->tailListaChave);
+    }
+    
+    printf("Imprimindo lista de chaves\n");
+    escreveListaChave(listaChaves);
     return 0;
 }
 
@@ -65,9 +75,9 @@ ListaChaves* criaListaChaves(){
     return listaChaves;
 }
 
-Chave* criaChave(){
+Chave* criaChave(int id){
     Chave* chave = (Chave*) malloc(sizeof(Chave));
-    chave->id = 0;
+    chave->id = id;
     chave->nextChave = NULL;
     chave->nextChave = chave->prevChave = NULL;
 
@@ -76,136 +86,44 @@ Chave* criaChave(){
     return chave;
 }
 
-void insereListaChave(ListaChaves* listaChaves){
-    Chave* novaChave = criaChave(); 
-    if(listaChaves->tamanho==0){
+void insereListaChave(ListaChaves* listaChaves, int id, Chave* chavePivo){
+    Chave* novaChave = criaChave(id); 
+    if(listaChaves->tamanho == 0){
         listaChaves->headListaChave = novaChave;
         listaChaves->tailListaChave = novaChave;
+    }else{
+        novaChave->nextChave = chavePivo->nextChave;
+        novaChave->prevChave = chavePivo;
+
+        if(chavePivo->nextChave == NULL){
+            listaChaves->tailListaChave = novaChave;
+        }else{
+            chavePivo->nextChave->prevChave = novaChave;
+        }
+
+        chavePivo->nextChave = novaChave;
     }
+
+    listaChaves->tamanho++;
     
-    
 }
 
-
-
-// Funções para a lista de elementos
-Lista* criaLista(){
-    Lista* lista = (Lista*)malloc(sizeof(Lista));
-
-    lista->tamanho = 0;
-    lista->head = NULL;
-    lista->tail = NULL;
-
-    return lista;
-}
-
-Elemento* criaElemento(char* dado){
-    Elemento* elemento = (Elemento*) malloc(sizeof(Elemento));
-    strcpy(elemento->dado, dado);
-    elemento->next = NULL;
-    elemento->next = elemento->prev =NULL;
-    
-    return elemento;
-}
-
-
-bool listaEstaVazia(Lista* lista){
-    return (lista->tamanho == 0);
-}
-
-void escreveLista(Lista* lista){
-   if(listaEstaVazia(lista)){
-        printf("Lista vazia\n");
+void escreveListaChave(ListaChaves* listaChave){
+   if(listaChave->tamanho == 0){
+        printf("Lista de chaves esta vazia\n");
         return;
     }
 
-    Elemento* pointer = lista->head;
-
-    printf("->");
+    Chave* pointer = listaChave->headListaChave;
     while (pointer!=NULL)
     {
-        printf("%s -> ", pointer->dado);
-        pointer = pointer->next;
+        printf("%i \n", pointer->id);
+        pointer = pointer->nextChave;
     }
     printf("NUUL \n");
     
 }
 
-void insereLista(Lista* lista, char* dado, Elemento* elementoPivo){
-    Elemento* novo_elemento = criaElemento(dado);    
-    strcpy(novo_elemento->dado, dado);   
 
-    if((elementoPivo == NULL) && !listaEstaVazia(lista)){
-        printf("So eh aceito pivo nulo na insercao do primeiro elemento");
-    }
-
-    if(listaEstaVazia(lista)){
-        lista->head = novo_elemento;
-        lista->tail = novo_elemento;
-    }else{
-        novo_elemento->next = elementoPivo->next;
-        novo_elemento->prev = elementoPivo;
-
-        if(elementoPivo->next == NULL){
-            lista->tail = novo_elemento;
-        }else{
-            elementoPivo->next->prev = novo_elemento;
-        }
-
-        elementoPivo->next = novo_elemento;
-    }
-
-    lista->tamanho++;
-
-}
-
-void removeLista(Lista* lista, Elemento* elemento){
-    if((elemento != NULL) && (!listaEstaVazia(lista))){
-        if(elemento==lista->head){
-            lista->head = elemento->next;
-            if(lista->head == NULL){
-                lista->tail = NULL;
-            }else{
-                elemento->next->prev = NULL;
-            }
-        }else{
-            elemento->prev->next = elemento->next;
-            if(elemento->next == NULL){
-                lista->tail = elemento->prev;
-            }else{
-                elemento->next->prev = elemento->prev;
-            }
-        }
-        
-        free(elemento);
-        lista->tamanho--;
-    }
-    
-}
-
-void buscaLista(Lista* lista){
-    char elemento[25];
-    printf("Digite o elemento a ser procurado: \n");
-    scanf("%c", elemento);
-    
-    //percore cabeca-cauda
-   Elemento* pointer = lista->head;
-
-    while(pointer!=NULL && pointer->dado != elemento){
-         pointer = pointer->next;
-    }
-    
-    //percore cauda-cabeca
-    /*
-    Elemento* pointer = lista->tail;
-    while(pointer!=NULL && pointer->dado != elemento){
-         pointer = pointer->prev;
-    }
-    */
-    if(pointer==NULL){
-        printf("Elemento nao esta na lista\n");
-    }else{
-        printf("Elemento encontrado: %s\n", pointer->dado);
-    }
-}
+// Funções para a lista de elementos
 

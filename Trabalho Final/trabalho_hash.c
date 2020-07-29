@@ -60,6 +60,11 @@ int main(){
     printf("Imprimindo lista de chaves\n");
     escreveListaChave(listaChaves);
 
+    printf("Adicionando elementos a lista de elementos\n");
+
+    ListaElementos* listaElementos = criaListaElementos();
+    insereListaElementos(listaElementos, "Mateus", listaElementos->tailListaElementos);
+
     return 0;
 }
 
@@ -146,28 +151,106 @@ Elemento* criaElemento(char* nome){
 }
 
 int hash(char* nome){
-    int i = 0;
-    int key;
+    int i, key = 0;
     char primeiraLetra;
+
     for(i = 0; i < 25; i++){
        primeiraLetra = nome[0];
     }
 
-    if(primeiraLetra == 'M'){
-       key = 77; 
+    switch (primeiraLetra){
+    case 'A':
+        key = 65; 
+        break;
+    case 'B':
+        key = 66; 
+        break;
+    case 'C':
+        key = 67; 
+        break;
+    case 'D':
+        key = 68; 
+        break;
+    case 'E':
+        key = 69; 
+        break;
+    case 'F':
+        key = 70; 
+        break;
+    case 'G':
+        key = 71; 
+        break;
+    case 'H':
+        key = 72; 
+        break;
+    case 'I':
+        key = 73; 
+        break;
+    case 'J':
+        key = 74; 
+        break;
+    case 'K':
+        key = 75; 
+        break;
+    case 'L':
+        key = 76; 
+        break;
+    case 'M':
+        key = 77; 
+        break;
+    case 'N':
+        key = 78; 
+        break;
+    case 'O':
+        key = 79; 
+        break;
+    case 'P':
+        key = 80; 
+        break;        
+    case 'Q':
+        key = 81; 
+        break;
+    case 'R':
+        key = 82; 
+        break;
+    case 'S':
+        key = 83; 
+        break;
+    case 'T':
+        key = 84; 
+        break;
+    case 'U':
+        key = 85; 
+        break;
+    case 'V':
+        key = 86; 
+        break;
+    case 'W':
+        key = 87; 
+        break;
+    case 'X':
+        key = 88; 
+        break;
+    case 'Y':
+        key = 89; 
+        break;
+    case 'Z':
+        key = 90; 
+        break;                    
+    default:
+        break;
     }
 
     return key % 10;
 }
 
-
 void insereListaElementos(ListaElementos* listaElementos, char* nome, Elemento* elementoPivo){
+    Chave* elementoChave;
     int h;
     Elemento* novoElemento = criaElemento(nome);    
     strcpy(novoElemento->dado, nome);
     
     h = hash(nome);
-
 
     if(listaElementos->tamanho == 0){
         listaElementos->headListaElementos = novoElemento;
@@ -185,5 +268,26 @@ void insereListaElementos(ListaElementos* listaElementos, char* nome, Elemento* 
         elementoPivo->nextElemento = novoElemento;
     }
 
-    listaElementos->tamanho++;    
+    listaElementos->tamanho++;   
+
+    printf("%p\n",elementoChave->headListaElementos);
+    printf("%p\n",listaElementos->headListaElementos);
+    if(elementoChave->id == h){
+        elementoChave->headListaElementos = listaElementos->headListaElementos;
+    }
+}
+
+void escreveListaElementos(ListaElementos* listaElementos){
+     if(listaElementos->tamanho == 0){
+        printf("Lista de elementos vazia\n");
+        return;
+    }
+
+    Elemento* pointer = listaElementos->tailListaElementos;
+
+    while (pointer!=NULL){
+        printf("\n%s  ", pointer->dado);
+        pointer = pointer->prevElemento;
+    }
+    printf("\n");
 }

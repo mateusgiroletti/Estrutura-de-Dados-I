@@ -28,16 +28,16 @@ typedef struct sChave{
     struct sLista *headListaElementos;
 } Chave;
 
+Lista* criaLista();
+
 // Funções para a lista de chaves
-Lista* criaListaChaves();
 Chave* criaChave(int);
 void insereListaChave(Lista*, int, Chave*);
 void escreveListaChave(Lista*);
 
 // Funções para a lista de elementos
-Lista* criaListaElementos();
 Elemento* criaElemento(char*);
-void insereListaElementos(Lista*, char*, Elemento*);
+void insereListaElementos(Lista*, char*, Elemento*, Lista*);
 void escreveListaElementos(Lista*);
 void removeListaElementos(Lista*, Elemento*);
 void buscaListaElementos(Lista*);
@@ -46,7 +46,7 @@ int hash(char*);
 // Função que inicia o programa
 int main(){
     int i;
-    Lista* listaChaves = criaListaChaves();
+    Lista* listaChaves = criaLista();
 
     printf("Inserindo dados\n");
 
@@ -59,24 +59,56 @@ int main(){
 
     printf("Adicionando elementos a lista de elementos\n");
 
-    Lista* listaElementos = criaListaElementos();
-    insereListaElementos(listaElementos, "Mateus", listaElementos->tailListaElementos);
+    Lista* listaElementos = criaLista();
+
+    FILE *file = fopen("nomes.txt", "r");
+
+    char nome[50];
+
+    while(fgets(nome, 50, file)){
+        insereListaElementos(listaElementos, nome, listaElementos->tailListaElementos, listaChaves);
+    }
+    
+    fclose(file);
 
     escreveListaElementos(listaElementos);
+    
+    Elemento* pointer = listaElementos->headListaElementos;  
+
+    printf("head lista %s", pointer->dado);
+
+    int retorno = strcmp(pointer->dado, "MIQUAELI");
+
+    printf("retorno %d", retorno);
+
+    while(pointer != NULL && retorno != 0){
+        pointer = pointer->nextElemento;
+    }
+
+    if(retorno == 0){
+        printf("Nome %s esta na chave %d \n", pointer->dado, pointer->chave->id);
+    }else{
+        printf("erro no print!\n");
+    }
+
+    
 
     return 0;
 }
 
 // Funções para a lista de chaves
 
-Lista* criaListaChaves(){
-    Lista* listaChaves = (Lista*)malloc(sizeof(Lista));
+Lista* criaLista(){
+    Lista* lista = (Lista*)malloc(sizeof(Lista));
 
-    listaChaves->tamanho = 0;
-    listaChaves->headListaChave = NULL;
-    listaChaves->tailListaChave = NULL;
+    lista->tamanho = 0;
+    lista->headListaChave = NULL;
+    lista->tailListaChave = NULL;
 
-    return listaChaves;
+    lista->headListaElementos = NULL;
+    lista->tailListaElementos = NULL;
+
+    return lista;
 }
 
 Chave* criaChave(int id){
@@ -84,8 +116,6 @@ Chave* criaChave(int id){
     chave->id = id;
     chave->nextChave = NULL;
     chave->nextChave = chave->prevChave = NULL;
-
-    chave->headListaElementos = NULL;
 
     return chave;
 }
@@ -129,15 +159,6 @@ void escreveListaChave(Lista* listaChave){
 }
 
 // Funções para a lista de elementos
-Lista* criaListaElementos(){
-    Lista* listaElementos = (Lista*)malloc(sizeof(Lista));
-
-    listaElementos->tamanho = 0;
-    listaElementos->headListaElementos = NULL;
-    listaElementos->tailListaElementos = NULL;
-
-    return listaElementos;
-}
 
 Elemento* criaElemento(char* nome){
     Elemento* elemento = (Elemento*) malloc(sizeof(Elemento));
@@ -245,8 +266,7 @@ int hash(char* nome){
     return key % 10;
 }
 
-void insereListaElementos(Lista* listaElementos, char* nome, Elemento* elementoPivo){
-    Chave* elementoChave;
+void insereListaElementos(Lista* listaElementos, char* nome, Elemento* elementoPivo, Lista* listaChaves){
     int h;
     Elemento* novoElemento = criaElemento(nome);    
     strcpy(novoElemento->dado, nome);
@@ -269,11 +289,20 @@ void insereListaElementos(Lista* listaElementos, char* nome, Elemento* elementoP
         elementoPivo->nextElemento = novoElemento;
     }
 
-    listaElementos->tamanho++;   
-    /*
-    if(elementoChave->id == h){
-        novoElemento->chave = listaElementos->headListaElementos;
-    }*/
+    listaElementos->tamanho++; 
+
+    Chave* pointer = listaChaves->headListaChave;  
+
+    while(pointer != NULL && pointer->id != h){
+        pointer = pointer->nextChave;
+    }
+
+    if(pointer->id == h){
+        novoElemento->chave = pointer;
+    }else{
+        printf("erro no insere lista!");
+    }
+   
 }
 
 void escreveListaElementos(Lista* listaElementos){
@@ -286,7 +315,7 @@ void escreveListaElementos(Lista* listaElementos){
 
     while (pointer!=NULL){
         printf("\n%s  ", pointer->dado);
-        pointer = pointer->prevElemento;
+        pointer = pointer->nextElemento;
     }
     printf("\n");
 }

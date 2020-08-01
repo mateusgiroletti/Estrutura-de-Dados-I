@@ -7,49 +7,46 @@ typedef struct sElemento{
     char dado[25];
     struct sElemento *nextElemento;
     struct sElemento *prevElemento;
+
+    struct sChave *chave;
 } Elemento;
 
-typedef struct sListaElementos{
+typedef struct sLista{
     int tamanho;
     struct sElemento *headListaElementos;
     struct sElemento *tailListaElementos;
-} ListaElementos;
+
+    struct sChave *headListaChave;
+    struct sChave *tailListaChave;
+} Lista;
 
 typedef struct sChave{
     int id;
     struct sChave *nextChave;
     struct sChave *prevChave;
 
-    struct sListaElementos *headListaElementos;
-
+    struct sLista *headListaElementos;
 } Chave;
 
-typedef struct sListaChaves{
-    int tamanho;
-    struct sChave *headListaChave;
-    struct sChave *tailListaChave;
-
-} ListaChaves;
-
 // Funções para a lista de chaves
-ListaChaves* criaListaChaves();
+Lista* criaListaChaves();
 Chave* criaChave(int);
-void insereListaChave(ListaChaves*, int, Chave*);
-void escreveListaChave(ListaChaves*);
+void insereListaChave(Lista*, int, Chave*);
+void escreveListaChave(Lista*);
 
 // Funções para a lista de elementos
-ListaElementos* criaListaElementos();
+Lista* criaListaElementos();
 Elemento* criaElemento(char*);
-void insereListaElementos(ListaElementos*, char*, Elemento*);
-void escreveListaElementos(ListaElementos*);
-void removeListaElementos(ListaElementos*, Elemento*);
-void buscaListaElementos(ListaElementos*);
+void insereListaElementos(Lista*, char*, Elemento*);
+void escreveListaElementos(Lista*);
+void removeListaElementos(Lista*, Elemento*);
+void buscaListaElementos(Lista*);
 int hash(char*);
 
 // Função que inicia o programa
 int main(){
     int i;
-    ListaChaves* listaChaves = criaListaChaves();
+    Lista* listaChaves = criaListaChaves();
 
     printf("Inserindo dados\n");
 
@@ -62,16 +59,18 @@ int main(){
 
     printf("Adicionando elementos a lista de elementos\n");
 
-    ListaElementos* listaElementos = criaListaElementos();
+    Lista* listaElementos = criaListaElementos();
     insereListaElementos(listaElementos, "Mateus", listaElementos->tailListaElementos);
+
+    escreveListaElementos(listaElementos);
 
     return 0;
 }
 
 // Funções para a lista de chaves
 
-ListaChaves* criaListaChaves(){
-    ListaChaves* listaChaves = (ListaChaves*)malloc(sizeof(ListaChaves));
+Lista* criaListaChaves(){
+    Lista* listaChaves = (Lista*)malloc(sizeof(Lista));
 
     listaChaves->tamanho = 0;
     listaChaves->headListaChave = NULL;
@@ -91,7 +90,7 @@ Chave* criaChave(int id){
     return chave;
 }
 
-void insereListaChave(ListaChaves* listaChaves, int id, Chave* chavePivo){
+void insereListaChave(Lista* listaChaves, int id, Chave* chavePivo){
     Chave* novaChave = criaChave(id); 
     if(listaChaves->tamanho == 0){
         listaChaves->headListaChave = novaChave;
@@ -113,7 +112,7 @@ void insereListaChave(ListaChaves* listaChaves, int id, Chave* chavePivo){
     
 }
 
-void escreveListaChave(ListaChaves* listaChave){
+void escreveListaChave(Lista* listaChave){
    if(listaChave->tamanho == 0){
         printf("Lista de chaves esta vazia\n");
         return;
@@ -130,8 +129,8 @@ void escreveListaChave(ListaChaves* listaChave){
 }
 
 // Funções para a lista de elementos
-ListaElementos* criaListaElementos(){
-    ListaElementos* listaElementos = (ListaElementos*)malloc(sizeof(ListaElementos));
+Lista* criaListaElementos(){
+    Lista* listaElementos = (Lista*)malloc(sizeof(Lista));
 
     listaElementos->tamanho = 0;
     listaElementos->headListaElementos = NULL;
@@ -145,7 +144,9 @@ Elemento* criaElemento(char* nome){
     strcpy(elemento->dado, nome);
     
     elemento->nextElemento = NULL;
-    elemento->nextElemento = elemento->prevElemento =NULL;
+    elemento->nextElemento = elemento->prevElemento = NULL;
+
+    elemento->chave = NULL;
 
     return elemento;
 }
@@ -244,7 +245,7 @@ int hash(char* nome){
     return key % 10;
 }
 
-void insereListaElementos(ListaElementos* listaElementos, char* nome, Elemento* elementoPivo){
+void insereListaElementos(Lista* listaElementos, char* nome, Elemento* elementoPivo){
     Chave* elementoChave;
     int h;
     Elemento* novoElemento = criaElemento(nome);    
@@ -269,21 +270,19 @@ void insereListaElementos(ListaElementos* listaElementos, char* nome, Elemento* 
     }
 
     listaElementos->tamanho++;   
-
-    printf("%p\n",elementoChave->headListaElementos);
-    printf("%p\n",listaElementos->headListaElementos);
+    /*
     if(elementoChave->id == h){
-        elementoChave->headListaElementos = listaElementos->headListaElementos;
-    }
+        novoElemento->chave = listaElementos->headListaElementos;
+    }*/
 }
 
-void escreveListaElementos(ListaElementos* listaElementos){
+void escreveListaElementos(Lista* listaElementos){
      if(listaElementos->tamanho == 0){
         printf("Lista de elementos vazia\n");
         return;
     }
 
-    Elemento* pointer = listaElementos->tailListaElementos;
+    Elemento* pointer = listaElementos->headListaElementos;
 
     while (pointer!=NULL){
         printf("\n%s  ", pointer->dado);

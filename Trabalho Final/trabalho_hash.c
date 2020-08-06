@@ -29,8 +29,6 @@ typedef struct sChave{
 
 } Chave;
 
-
-
 // Funções para a lista de chaves
 Lista* criaListaChaves();
 Chave* criaChave(int);
@@ -42,8 +40,8 @@ Elemento* criaElemento(char*);
 Lista* criaListaElementos();
 void insereListaElementos(Lista*, char*, Elemento*, Lista*);
 void escreveListaElementos(Lista*);
-void removeListaElementos(Lista*, Elemento*);
-void buscaListaElementos(Lista*);
+void removeListaElementos(Lista*, char*);
+void buscaElementos(Lista*, char*);
 int hash(char*);
 
 // Função que inicia o programa
@@ -57,9 +55,7 @@ int main(){
         insereListaChave(listaChaves, i, listaChaves->tailListaChave);
     }
     
-    printf("Imprimindo lista de chaves\n");
-    escreveListaChave(listaChaves);
-
+ 
     printf("Adicionando elementos a lista de elementos\n");
 
     Lista* listaElementos0 = criaListaElementos();
@@ -73,8 +69,8 @@ int main(){
     Lista* listaElementos8 = criaListaElementos();
     Lista* listaElementos9 = criaListaElementos();
 
-
-    FILE *file = fopen("nomes.txt", "r");
+    
+    FILE *file = fopen("nm.txt", "r");
 
     char nome[50];
 
@@ -120,17 +116,99 @@ int main(){
     
     fclose(file);
 
-    escreveListaElementos(listaElementos0);
-    printf("tamanho da lista 0: %d\n", listaElementos0->tamanho);
-    printf("tamanho da lista 1: %d\n", listaElementos1->tamanho);
-    printf("tamanho da lista 2: %d\n", listaElementos2->tamanho);
-    printf("tamanho da lista 3: %d\n", listaElementos3->tamanho);
-    printf("tamanho da lista 4: %d\n", listaElementos4->tamanho);
-    printf("tamanho da lista 5: %d\n", listaElementos5->tamanho);
-    printf("tamanho da lista 6: %d\n", listaElementos6->tamanho);
-    printf("tamanho da lista 7: %d\n", listaElementos7->tamanho);
-    printf("tamanho da lista 8: %d\n", listaElementos8->tamanho);
-    printf("tamanho da lista 9: %d\n", listaElementos9->tamanho);
+    char elementoBuscar[50];
+    printf("Digite o nome a ser procurado: \n");
+    scanf("%s", elementoBuscar);
+    int h = hash(elementoBuscar);
+
+    switch (h){
+    case 0:
+        buscaElementos(listaElementos0, elementoBuscar);
+        break;
+    case 1:
+        buscaElementos(listaElementos1, elementoBuscar);
+        break;
+    case 2:
+        buscaElementos(listaElementos2, elementoBuscar);
+        break;
+    case 3:
+        buscaElementos(listaElementos3, elementoBuscar);
+        break;
+    case 4:
+        buscaElementos(listaElementos4, elementoBuscar);
+        break;
+    case 5:
+        buscaElementos(listaElementos5, elementoBuscar);
+        break;
+    case 6:
+        buscaElementos(listaElementos6, elementoBuscar);
+        break;
+    case 7:
+        buscaElementos(listaElementos7, elementoBuscar);
+        break;
+    case 8:
+        buscaElementos(listaElementos8, elementoBuscar);
+        break;
+    case 9:
+        buscaElementos(listaElementos9, elementoBuscar);
+        break;
+
+    default:
+        break;
+    }
+    
+    printf("tamanho da chave 0: %d\n", listaElementos0->tamanho);
+    printf("tamanho da chave 1: %d\n", listaElementos1->tamanho);
+    printf("tamanho da chave 2: %d\n", listaElementos2->tamanho);
+    printf("tamanho da chave 3: %d\n", listaElementos3->tamanho);
+    printf("tamanho da chave 4: %d\n", listaElementos4->tamanho);
+    printf("tamanho da chave 5: %d\n", listaElementos5->tamanho);
+    printf("tamanho da chave 6: %d\n", listaElementos6->tamanho);
+    printf("tamanho da chave 7: %d\n", listaElementos7->tamanho);
+    printf("tamanho da chave 8: %d\n", listaElementos8->tamanho);
+    printf("tamanho da chave 9: %d\n", listaElementos9->tamanho);
+
+    char elementoRemover[50];
+    printf("Digite o nome a ser removido: \n");
+    scanf("%s", elementoRemover);
+    int h = hash(elementoRemover);
+
+    switch (h){
+    case 0:
+        removeListaElementos(listaElementos0, elementoRemover);
+        break;
+    case 1:
+        removeListaElementos(listaElementos1, elementoRemover);
+        break;
+    case 2:
+        removeListaElementos(listaElementos2, elementoRemover);
+        break;
+    case 3:
+        removeListaElementos(listaElementos3, elementoRemover);
+        break;
+    case 4:
+        removeListaElementos(listaElementos4, elementoRemover);
+        break;
+    case 5:
+        removeListaElementos(listaElementos5, elementoRemover);
+        break;
+    case 6:
+        removeListaElementos(listaElementos6, elementoRemover);
+        break;
+    case 7:
+        removeListaElementos(listaElementos7, elementoRemover);
+        break;
+    case 8:
+        removeListaElementos(listaElementos8, elementoRemover);
+        break;
+    case 9:
+        removeListaElementos(listaElementos9, elementoRemover);
+        break;
+
+    default:
+        break;
+    }   
+
 
     return 0;
 }
@@ -187,7 +265,7 @@ void escreveListaChave(Lista* listaChave){
     Chave* pointer = listaChave->headListaChave;
     while (pointer!=NULL)
     {
-        printf("%i \n", pointer->id);
+        printf("ID: %i tamanho: \n", pointer->id);
         pointer = pointer->nextChave;
     }
     printf("NUUL \n");
@@ -362,8 +440,35 @@ void escreveListaElementos(Lista* listaElementos){
     Elemento* pointer = listaElementos->headListaElementos;
 
     while (pointer!=NULL){
-        printf("\n%s  ", pointer->dado);
+        printf("%s", pointer->dado);
         pointer = pointer->nextElemento;
     }
-    printf("\n");
+    //printf("");
+}
+
+void buscaElementos(Lista* listaElementos, char* nome){
+    int tamanhoString;
+
+    Elemento* pointer = listaElementos->headListaElementos;
+
+    tamanhoString = strlen(nome);
+    while(pointer != NULL){
+        if(strncmp(pointer->dado, nome, tamanhoString)){
+            pointer = pointer->nextElemento;
+        }else{
+            break;
+        }
+    }
+
+    if(pointer == NULL){
+        printf("Elemento nao esta na lista\n");
+    }else{
+        printf("Elemento %s Esta na chave %d \n", nome, pointer->chave->id);
+    }
+       
+
+}
+
+void removeLista(Lista* listaElemento, char* nome){
+    
 }

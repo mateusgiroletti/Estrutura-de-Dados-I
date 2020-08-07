@@ -70,7 +70,7 @@ int main(){
     Lista* listaElementos9 = criaListaElementos();
 
     
-    FILE *file = fopen("nm.txt", "r");
+    FILE *file = fopen("nomes.txt", "r");
 
     char nome[50];
 
@@ -171,9 +171,10 @@ int main(){
     char elementoRemover[50];
     printf("Digite o nome a ser removido: \n");
     scanf("%s", elementoRemover);
-    int h = hash(elementoRemover);
+    
+    int hRemover = hash(elementoRemover);
 
-    switch (h){
+    switch (hRemover){
     case 0:
         removeListaElementos(listaElementos0, elementoRemover);
         break;
@@ -208,7 +209,6 @@ int main(){
     default:
         break;
     }   
-
 
     return 0;
 }
@@ -469,6 +469,43 @@ void buscaElementos(Lista* listaElementos, char* nome){
 
 }
 
-void removeLista(Lista* listaElemento, char* nome){
+void removeListaElementos(Lista* listaElemento, char* nome){
+    int tamanhoString;
+    Elemento* elemento = listaElemento->headListaElementos;
+
+    tamanhoString = strlen(nome);
+    
+    buscaElementos(listaElemento, nome);
+    if(listaElemento->tamanho == 0){
+        printf("Essa lista esta vazia!\n");
+    }else{
+        while(elemento != NULL){
+            if(strncmp(elemento->dado, nome, tamanhoString)){
+                elemento = elemento->nextElemento;
+            }else{
+                if(elemento == listaElemento->headListaElementos){
+                    listaElemento->headListaElementos = elemento->nextElemento;
+                    if(listaElemento->headListaElementos == NULL){
+                        listaElemento->tailListaElementos = NULL;
+                    }else{
+                        elemento->nextElemento->prevElemento = NULL;
+                    }
+                }else{
+                    elemento->prevElemento->nextElemento = elemento->nextElemento;
+                    if(elemento->nextElemento == NULL){
+                        listaElemento->tailListaElementos = elemento->prevElemento;
+                    }else{
+                        elemento->nextElemento->prevElemento = elemento->prevElemento;
+                    }
+                }
+                printf("Elemento com nome: %s foi removido da chave: %d \n", nome, elemento->chave->id);
+                free(elemento);
+                listaElemento->tamanho--;
+            }
+        }
+        
+    }
+
+   // escreveListaElementos(listaElemento);
     
 }

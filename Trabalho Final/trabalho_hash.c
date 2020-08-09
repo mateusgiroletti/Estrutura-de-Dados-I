@@ -44,6 +44,9 @@ void removeListaElementos(Lista*, char*);
 void buscaElementos(Lista*, char*);
 int hash(char*);
 
+//Função para ordenar A-Z
+void ordenaQuickSort(Lista*, Elemento*, Elemento*);
+
 // Função que inicia o programa
 int main(){
     int op;
@@ -82,7 +85,7 @@ int main(){
             }
             printf("Adicionando elementos a lista de elementos\n");
 
-            FILE *file = fopen("nomes.txt", "r");
+            FILE *file = fopen("nm.txt", "r");
             char nome[50];
 
             while(fgets(nome, 50, file)){
@@ -223,10 +226,18 @@ int main(){
             }   
 
         }else if(op == 5){
-            printf("Em construção");
+            printf("Antes de ordenar\n");
+            escreveListaElementos(listaElementos7);
+
+            ordenaQuickSort(listaElementos7, listaElementos7->headListaElementos, listaElementos7->tailListaElementos);
+
+            printf("Depois de ordenar\n");
+            escreveListaElementos(listaElementos7);
+    
         }
     }while (op != 6);
-    
+
+  
    
     return 0;
 }
@@ -519,5 +530,58 @@ void removeListaElementos(Lista* listaElemento, char* nome){
                 listaElemento->tamanho--;
             }
         }
+    }
+}
+
+void ordenaQuickSort(Lista* listaElemento, Elemento* inicio, Elemento* final){
+    int pivo, meio;
+    Elemento* esq = inicio;
+    Elemento* dir = final;
+    Elemento* aux;
+    Elemento* aux2;
+
+    meio = (int) (listaElemento->tamanho / 2);
+
+    Elemento* pointer = listaElemento->headListaElementos;
+
+    for (int i = 0; i < meio; i++){
+        pointer = pointer->nextElemento;
+    }
+
+    while (strcmp(dir->dado, esq->dado) > 0){
+        while(strcmp(esq->dado, pointer->dado) < 0){
+            esq = esq->nextElemento;
+        }
+
+        while(strcmp(dir->dado, pointer->dado) > 0){
+            dir = dir->prevElemento;
+        }
+
+        if(strcmp(esq->dado, dir->dado) <= 0){
+            aux = esq;
+            aux2 = esq;
+            
+            if(aux == listaElemento->headListaElementos){
+                listaElemento->headListaElementos = esq->nextElemento = aux2;
+            }else{
+                esq->nextElemento = aux2;
+            }
+            if(aux2 == listaElemento->tailListaElementos){
+                listaElemento->tailListaElementos = dir->prevElemento = aux;
+            }else{
+                dir->prevElemento = aux;
+            }
+
+            esq = esq->nextElemento;
+            dir = dir->prevElemento;
+        }
+    }    
+
+    if(strcmp(inicio->dado, dir->dado) < 0){
+        ordenaQuickSort(listaElemento, inicio, dir);
+    }
+
+    if(strcmp(esq->dado, final->dado) < 0){
+        ordenaQuickSort(listaElemento, final, esq);
     }
 }

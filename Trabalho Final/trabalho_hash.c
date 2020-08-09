@@ -64,7 +64,6 @@ int main(){
     Lista* listaElementos8 = criaListaElementos();
     Lista* listaElementos9 = criaListaElementos();
 
-
     do{ 
         printf("\n####MENU####\n\n");
         printf("1 - Inserir os dados do arquivo nomes\n");
@@ -85,7 +84,7 @@ int main(){
             }
             printf("Adicionando elementos a lista de elementos\n");
 
-            FILE *file = fopen("nm.txt", "r");
+            FILE *file = fopen("nomes.txt", "r");
             char nome[50];
 
             while(fgets(nome, 50, file)){
@@ -237,8 +236,6 @@ int main(){
         }
     }while (op != 6);
 
-  
-   
     return 0;
 }
 

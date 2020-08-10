@@ -58,12 +58,7 @@ int main(){
     Lista* listaElementos2 = criaListaElementos();
     Lista* listaElementos3 = criaListaElementos();
     Lista* listaElementos4 = criaListaElementos();
-    Lista* listaElementos5 = criaListaElementos();
-    Lista* listaElementos6 = criaListaElementos();
-    Lista* listaElementos7 = criaListaElementos();
-    Lista* listaElementos8 = criaListaElementos();
-    Lista* listaElementos9 = criaListaElementos();
-
+ 
     do{ 
         printf("\n####MENU####\n\n");
         printf("1 - Inserir os dados do arquivo nomes\n");
@@ -79,7 +74,7 @@ int main(){
         }else if(op == 1){
             printf("Inserindo chaves\n");
 
-            for(i=0; i<=9; i++){
+            for(i=0; i<=4; i++){
                 insereListaChave(listaChaves, i, listaChaves->tailListaChave);
             }
             printf("Adicionando elementos a lista de elementos\n");
@@ -106,25 +101,10 @@ int main(){
                 case 4:
                     insereListaElementos(listaElementos4, nome, listaElementos4->tailListaElementos, listaChaves);       
                     break;
-                case 5:
-                    insereListaElementos(listaElementos5, nome, listaElementos5->tailListaElementos, listaChaves);       
-                    break;
-                case 6:
-                    insereListaElementos(listaElementos6, nome, listaElementos6->tailListaElementos, listaChaves);       
-                    break;
-                case 7:
-                    insereListaElementos(listaElementos7, nome, listaElementos7->tailListaElementos, listaChaves);       
-                    break;
-                case 8:
-                    insereListaElementos(listaElementos8, nome, listaElementos8->tailListaElementos, listaChaves);       
-                    break;
-                case 9:
-                    insereListaElementos(listaElementos9, nome, listaElementos9->tailListaElementos, listaChaves);       
-                    break;                    
+               
                 default:
                     break;
                 }
-
             }
             
             fclose(file);
@@ -151,22 +131,7 @@ int main(){
             case 4:
                 buscaElementos(listaElementos4, elementoBuscar);
                 break;
-            case 5:
-                buscaElementos(listaElementos5, elementoBuscar);
-                break;
-            case 6:
-                buscaElementos(listaElementos6, elementoBuscar);
-                break;
-            case 7:
-                buscaElementos(listaElementos7, elementoBuscar);
-                break;
-            case 8:
-                buscaElementos(listaElementos8, elementoBuscar);
-                break;
-            case 9:
-                buscaElementos(listaElementos9, elementoBuscar);
-                break;
-
+           
             default:
                 break;
             }
@@ -176,11 +141,6 @@ int main(){
             printf("tamanho da chave 2: %d\n", listaElementos2->tamanho);
             printf("tamanho da chave 3: %d\n", listaElementos3->tamanho);
             printf("tamanho da chave 4: %d\n", listaElementos4->tamanho);
-            printf("tamanho da chave 5: %d\n", listaElementos5->tamanho);
-            printf("tamanho da chave 6: %d\n", listaElementos6->tamanho);
-            printf("tamanho da chave 7: %d\n", listaElementos7->tamanho);
-            printf("tamanho da chave 8: %d\n", listaElementos8->tamanho);
-            printf("tamanho da chave 9: %d\n", listaElementos9->tamanho);
         }else if(op == 4){
             char elementoRemover[50];
             printf("Digite o nome a ser removido: \n");
@@ -204,34 +164,19 @@ int main(){
             case 4:
                 removeListaElementos(listaElementos4, elementoRemover);
                 break;
-            case 5:
-                removeListaElementos(listaElementos5, elementoRemover);
-                break;
-            case 6:
-                removeListaElementos(listaElementos6, elementoRemover);
-                break;
-            case 7:
-                removeListaElementos(listaElementos7, elementoRemover);
-                break;
-            case 8:
-                removeListaElementos(listaElementos8, elementoRemover);
-                break;
-            case 9:
-                removeListaElementos(listaElementos9, elementoRemover);
-                break;
-
+            
             default:
                 break;
             }   
 
         }else if(op == 5){
             printf("Antes de ordenar\n");
-            escreveListaElementos(listaElementos7);
+            //escreveListaElementos(listaElementos7);
 
-            ordenaQuickSort(listaElementos7, listaElementos7->headListaElementos, listaElementos7->tailListaElementos);
+            //ordenaQuickSort(listaElementos7, listaElementos7->headListaElementos, listaElementos7->tailListaElementos);
 
             printf("Depois de ordenar\n");
-            escreveListaElementos(listaElementos7);
+           // escreveListaElementos(listaElementos7);
     
         }
     }while (op != 6);
@@ -414,7 +359,7 @@ int hash(char* nome){
         break;
     }
 
-    return key % 10;
+    return key % 5;
 }
 
 void insereListaElementos(Lista* listaElementos, char* nome, Elemento* elementoPivo, Lista* listaChaves){

@@ -43,7 +43,6 @@ void escreveListaElementos(Lista*);
 void removeListaElementos(Lista*, char*);
 void buscaElementos(Lista*, char*);
 int hash(char*);
-
 //Função para ordenar A-Z
 void ordenaQuickSort(Lista*, Elemento*, Elemento*);
 
@@ -170,13 +169,15 @@ int main(){
             }   
 
         }else if(op == 5){
+            int op_seleciondo;
             printf("Antes de ordenar\n");
-            //escreveListaElementos(listaElementos7);
 
-            //ordenaQuickSort(listaElementos7, listaElementos7->headListaElementos, listaElementos7->tailListaElementos);
+            escreveListaElementos(listaElementos0);
+
+            ordenaQuickSort(listaElementos0, listaElementos0->headListaElementos, listaElementos0->tailListaElementos);
 
             printf("Depois de ordenar\n");
-           // escreveListaElementos(listaElementos7);
+            escreveListaElementos(listaElementos0);
     
         }
     }while (op != 6);

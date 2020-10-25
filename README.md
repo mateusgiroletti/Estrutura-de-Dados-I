@@ -1,3 +1,3 @@
 # Estrutura-de-Dados-I
 
-Repositorio para amarzenar projetos da disciplina de Estutura de dados I
+Repositório para armazenar projetos da disciplina de Estrutura de dados I
